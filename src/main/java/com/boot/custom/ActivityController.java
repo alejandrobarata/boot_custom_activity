@@ -11,29 +11,29 @@ import java.util.Map;
 public class ActivityController {
 
     @PostMapping("/save")
-    public ResponseEntity<String> save (@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> save(@RequestBody Map<String, Object> payload) {
         return new ResponseEntity<>("Save", HttpStatus.OK);
     }
 
     @PostMapping("/publish")
-    public ResponseEntity<String> publish (@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> publish(@RequestBody Map<String, Object> payload) {
         return new ResponseEntity<>("Publish", HttpStatus.OK);
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<String> validate (@RequestBody Map<String, Object> payload) {
-        return new ResponseEntity<>("Validate", HttpStatus.OK);
+    public ResponseEntity<String> validate(@RequestBody Map<String, Object> payload) {
+        return new ResponseEntity<>("Validate", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/stop")
-    public ResponseEntity<String> stop (@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<String> stop(@RequestBody Map<String, Object> payload) {
         return new ResponseEntity<>("Stop", HttpStatus.OK);
     }
 
     @PostMapping("/execute")
-    public ActivityResult execute (@RequestBody ExecutePayload payload) {
+    public ActivityResult execute(@RequestBody ExecutePayload payload) {
         for (Map<String, String> inArgument : payload.getInArguments()) {
-            if(inArgument.containsKey("status") && inArgument.get("status").equals("true")){
+            if (inArgument.containsKey("status") && inArgument.get("status").equals("true")) {
                 return new ActivityResult("true");
             }
         }
