@@ -1,7 +1,9 @@
 {
+  "key": "ae74641e-35b1-4da0-8fe5-ac1a940c5e39",
   "workflowApiVersion": "1.1",
   "metaData": {
     "icon": "images/icon.png",
+    "iconSmall": "images/icon_small.png",
     "category": "message"
   },
   "type": "Rest",
@@ -11,36 +13,28 @@
       "description": "Custom Activity envio Postal"
     }
   },
-  "arguments": {
-    "execute": {
-      "inArguments": [
-        {
-          "emailAddress": "{{InteractionDefaults.Email}}"
-        },
-        {
-          "phoneNumber": "{{Contact.Default.PhoneNumber}}"
-        }
-      ],
-      "outArguments": [
-        {
-          "foundSignupDate": ""
-        }
-      ],
-      "url": "https://custom-activity-postal.herokuapp.com/activity/execute"
-    }
-  },
   "configurationArguments": {
+    "applicationExtensionKey": "ae74641e-35b1-4da0-8fe5-ac1a940c5e39",
     "save": {
-      "url": "https://custom-activity-postal.herokuapp.com/activity/save"
+      "url": "https://custom-activity-postal.herokuapp.com/activity/save",
+      "verb": "POST",
+      "body": "",
+      "useJwt": true,
+      "customerKey": "KRtWcxY6TbyBMHN0ishwkYnnt3ErZADWRREPb0kHFmW4cteVhx0ZHaXKKjApinBmCxl1bwKj8gWJOhiqblP1TkWrMHVe5UvAOmWUShM2T1vZTx1R802zbpMyCrABLarLORhXKErEK78WEOg6D7G-QcCdbILxo-sqMmIrLUfCY3yejw9wGFwS_qG56aFogjbA_1XZFTvFspRa-BWs53IAjijMTXh6DpEktG6PvEPIsXgxrDfBhnJrLjekYMd9KQ2"
     },
     "publish": {
-      "url": "https://custom-activity-postal.herokuapp.com/activity/publish"
+      "url": "https://custom-activity-postal.herokuapp.com/activity/publish",
+      "verb": "POST",
+      "body": "",
+      "useJwt": true,
+      "customerKey": "KRtWcxY6TbyBMHN0ishwkYnnt3ErZADWRREPb0kHFmW4cteVhx0ZHaXKKjApinBmCxl1bwKj8gWJOhiqblP1TkWrMHVe5UvAOmWUShM2T1vZTx1R802zbpMyCrABLarLORhXKErEK78WEOg6D7G-QcCdbILxo-sqMmIrLUfCY3yejw9wGFwS_qG56aFogjbA_1XZFTvFspRa-BWs53IAjijMTXh6DpEktG6PvEPIsXgxrDfBhnJrLjekYMd9KQ2"
     },
     "validate": {
-      "url": "https://custom-activity-postal.herokuapp.com/activity/validate"
-    },
-    "stop": {
-      "url": "https://custom-activity-postal.herokuapp.com/activity/stop"
+      "url": "https://custom-activity-postal.herokuapp.com/activity/validate",
+      "verb": "POST",
+      "body": "",
+      "useJwt": true,
+      "customerKey": "KRtWcxY6TbyBMHN0ishwkYnnt3ErZADWRREPb0kHFmW4cteVhx0ZHaXKKjApinBmCxl1bwKj8gWJOhiqblP1TkWrMHVe5UvAOmWUShM2T1vZTx1R802zbpMyCrABLarLORhXKErEK78WEOg6D7G-QcCdbILxo-sqMmIrLUfCY3yejw9wGFwS_qG56aFogjbA_1XZFTvFspRa-BWs53IAjijMTXh6DpEktG6PvEPIsXgxrDfBhnJrLjekYMd9KQ2"
     }
   },
   "wizardSteps": [
@@ -69,17 +63,28 @@
       "fullscreen": true
     }
   },
+  "outcomes": [
+    {
+      "arguments": {
+        "branchResult": "<KEY FOR PATH 1>"
+      },
+      "metaData": {
+        "label": "<LABEL FOR PATH 1>"
+      }
+    },
+    {
+      "arguments": {
+        "branchResult": "<KEY FOR PATH 2>"
+      },
+      "metaData": {
+        "label": "<LABEL FOR PATH 2>"
+      }
+    }
+  ],
   "schema": {
     "arguments": {
       "execute": {
         "inArguments": [
-          {
-            "phoneNumber": {
-              "dataType": "Phone",
-              "isNullable": false,
-              "direction": "in"
-            }
-          },
           {
             "emailAddress": {
               "dataType": "Email",
@@ -98,6 +103,28 @@
           }
         ]
       }
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "emailAddress": "{{InteractionDefaults.Email}}"
+        }
+      ],
+      "outArguments": [
+        {
+          "foundSignupDate": ""
+        }
+      ],
+      "url": "https://custom-activity-postal.herokuapp.com/activity/execute",
+      "verb": "POST",
+      "body": "",
+      "header": "",
+      "format": "json",
+      "useJwt": true,
+      "customerKey": "KRtWcxY6TbyBMHN0ishwkYnnt3ErZADWRREPb0kHFmW4cteVhx0ZHaXKKjApinBmCxl1bwKj8gWJOhiqblP1TkWrMHVe5UvAOmWUShM2T1vZTx1R802zbpMyCrABLarLORhXKErEK78WEOg6D7G-QcCdbILxo-sqMmIrLUfCY3yejw9wGFwS_qG56aFogjbA_1XZFTvFspRa-BWs53IAjijMTXh6DpEktG6PvEPIsXgxrDfBhnJrLjekYMd9KQ2",
+      "timeout": 90000
     }
   }
 }
