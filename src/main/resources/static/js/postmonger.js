@@ -1,3 +1,28 @@
+'use strict';
+console.log('Entro');
+
+requirejs.config({
+  paths: {
+    postmonger: 'postmonger',
+  },
+  shim: {
+    'jquery.min': {
+      exports: '$',
+    },
+    '../customActivity': {
+      deps: ['jquery.min', 'postmonger'],
+    },
+  },
+});
+
+requirejs(['jquery.min', '../customActivity'], function ($, customEvent) {});
+
+requirejs.onError = function (err) {
+  if (err.requireType === 'timeout') {
+    console.log('modules: ' + err.requireModules);
+  }
+  throw err;
+}; //
 /*
  * Postmonger.js   version 0.0.14
  * https://github.com/kevinparkerson/postmonger
@@ -7,9 +32,7 @@
  * Further details and documentation:
  * http://kevinparkerson.github.com/postmonger/
  *
- */ //
-
-(function (root, factory) {
+ */ (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define('postmonger', [], function () {
       return factory(root);
