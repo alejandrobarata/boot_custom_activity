@@ -3,21 +3,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Custom Journey Builder Activity</title>
+    <title>Custom Activity - Envío Postal</title>
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/require.js"></script>
-    <script type="text/javascript">
-      (function () {
-        var config = {
-          baseUrl: '',
-        };
-
-        var dependencies = ['customActivity'];
-
-        require(config, dependencies);
-      })();
-    </script>
 
     <!--Styles-->
     <style type="text/css">
@@ -35,13 +24,12 @@
   </head>
   <body>
     <div id="step1" class="step">
-      Select your SMS message:
+      Canal:
       <select id="select1">
         <option value="">Select an option</option>
-        <option value="someMessage">Some SMS</option>
-        <option value="anotherMessage">Another SMS</option>
-        <option value="thirdMessage">Third SMS</option>
-        <option value="unknownMessage">Unknown SMS</option>
+        <option value="papel">Papel</option>
+        <option value="fto">fto</option>
+        <option value="telefono">Teléfono</option>
       </select>
 
       <button id="toggleLastStep">Toggle Last Step</button>

@@ -15,14 +15,17 @@
     "execute": {
       "inArguments": [
         {
-          "myInArgument": "inArgument coming from iframe"
+          "emailAddress": "{{InteractionDefaults.Email}}"
+        },
+        {
+          "phoneNumber": "{{Contact.Default.PhoneNumber}}"
         }
       ],
-      "outArguments": [],
-      "timeout": 100000,
-      "retryCount": 1,
-      "retryDelay": 10000,
-      "concurrentRequests": 5,
+      "outArguments": [
+        {
+          "foundSignupDate": ""
+        }
+      ],
       "url": "https://custom-activity-postal.herokuapp.com/activity/execute"
     }
   },
@@ -71,14 +74,29 @@
       "execute": {
         "inArguments": [
           {
-            "myInArgument": {
-              "dataType": "<some data type>",
+            "phoneNumber": {
+              "dataType": "Phone",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
+            "emailAddress": {
+              "dataType": "Email",
               "isNullable": false,
               "direction": "in"
             }
           }
         ],
-        "outArguments": []
+        "outArguments": [
+          {
+            "foundSignupDate": {
+              "dataType": "Date",
+              "direction": "out",
+              "access": "visible"
+            }
+          }
+        ]
       }
     }
   }
