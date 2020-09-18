@@ -1,5 +1,7 @@
-define(['postmonger'], function (Postmonger) {
-  'use strict';
+'use strict';
+
+define(function (require) {
+  var Postmonger = require('postmonger');
 
   var connection = new Postmonger.Session();
   var payload = {};
@@ -52,6 +54,7 @@ define(['postmonger'], function (Postmonger) {
   }
 
   function initialize(data) {
+    console.log('Entro');
     if (data) {
       payload = data;
     }

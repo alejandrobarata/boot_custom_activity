@@ -1,5 +1,4 @@
 'use strict';
-console.log('Entro');
 
 requirejs.config({
   paths: {
