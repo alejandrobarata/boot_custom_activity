@@ -1,129 +1,202 @@
-'use strict';
+define(['postmonger'], function (Postmonger) {
+  'use strict';
 
-define(function (require) {
-	var Postmonger = require('postmonger');
-	var connection = new Postmonger.Session();
-	var payload = {};
-	var steps = [
-		{'key': 'eventdefinitionkey', 'label': 'Event Definition Key'},
-		{'key': 'idselection', 'label': 'ID Selection'}
-	];
-	var currentStep = steps[0].key;
-	var eventDefinitionKey = '';
-	var deFields = [];
+  var connection = new Postmonger.Session();
+  var payload = {};
+  var lastStepEnabled = false;
+  var steps = [
+    // initialize to the same value as what's set in config.json for consistency
+    { label: 'Step 1', key: 'step1' },
+    { label: 'Step 2', key: 'step2' },
+    { label: 'Step 3', key: 'step3' },
+    { label: 'Step 4', key: 'step4', active: false },
+  ];
+  var currentStep = steps[0].key;
 
-	$(window).ready(function () {
-		connection.trigger('ready');
-		connection.trigger('requestInteraction');
-	});
+  $(window).ready(onRender);
 
-	function initialize (data) {
-		if (data) {
-			payload = data;
-		}
-	}
+  connection.on('initActivity', initialize);
+  connection.on('requestedTokens', onGetTokens);
+  connection.on('requestedEndpoints', onGetEndpoints);
 
-	function onClickedNext () {
-		if (currentStep.key === 'idselection') {
-			save();
-		} else {
-			connection.trigger('nextStep');
-		}
-	}
+  connection.on('clickedNext', onClickedNext);
+  connection.on('clickedBack', onClickedBack);
+  connection.on('gotoStep', onGotoStep);
 
-	function onClickedBack () {
-		connection.trigger('prevStep');
-	}
+  function onRender() {
+    // JB will respond the first time 'ready' is called with 'initActivity'
+    connection.trigger('ready');
 
-	function onGotoStep (step) {
-		showStep(step);
-		connection.trigger('ready');
-	}
+    connection.trigger('requestTokens');
+    connection.trigger('requestEndpoints');
 
-	function showStep (step, stepIndex) {
-		if (stepIndex && !step) {
-			step = steps[stepIndex - 1];
-		}
+    // Disable the next button if a value isn't selected
+    $('#select1').change(function () {
+      var message = getMessage();
+      connection.trigger('updateButton', {
+        button: 'next',
+        enabled: Boolean(message),
+      });
 
-		currentStep = step;
+      $('#message').html(message);
+    });
 
-		$('.step').hide();
+    // Toggle step 4 active/inactive
+    // If inactive, wizard hides it and skips over it during navigation
+    $('#toggleLastStep').click(function () {
+      lastStepEnabled = !lastStepEnabled; // toggle status
+      steps[3].active = !steps[3].active; // toggle active
 
-		switch (currentStep.key) {
-		case 'eventdefinitionkey':
-			$('#step1').show();
-			$('#step1 input').focus();
-			break;
-		case 'idselection':
-			$('#step2').show();
-			$('#step2 input').focus();
-			break;
-		}
-	}
+      connection.trigger('updateSteps', steps);
+    });
+  }
 
-	function requestedInteractionHandler (settings) {
-		try {
-			eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
-			$('#select-entryevent-defkey').val(eventDefinitionKey);
+  function initialize(data) {
+    if (data) {
+      payload = data;
+    }
 
-			if (settings.triggers[0].type === 'SalesforceObjectTriggerV2' &&
-					settings.triggers[0].configurationArguments &&
-					settings.triggers[0].configurationArguments.eventDataConfig) {
+    var message;
+    var hasInArguments = Boolean(
+      payload['arguments'] &&
+        payload['arguments'].execute &&
+        payload['arguments'].execute.inArguments &&
+        payload['arguments'].execute.inArguments.length > 0
+    );
 
-				// This workaround is necessary as Salesforce occasionally returns the eventDataConfig-object as string
-				if (typeof settings.triggers[0].configurationArguments.eventDataConfig === 'string' ||
-							!settings.triggers[0].configurationArguments.eventDataConfig.objects) {
-						settings.triggers[0].configurationArguments.eventDataConfig = JSON.parse(settings.triggers[0].configurationArguments.eventDataConfig);
-				}
+    var inArguments = hasInArguments
+      ? payload['arguments'].execute.inArguments
+      : {};
 
-				settings.triggers[0].configurationArguments.eventDataConfig.objects.forEach((obj) => {
-					deFields = deFields.concat(obj.fields.map((fieldName) => {
-						return obj.dePrefix + fieldName;
-					}));
-				});
+    $.each(inArguments, function (index, inArgument) {
+      $.each(inArgument, function (key, val) {
+        if (key === 'message') {
+          message = val;
+        }
+      });
+    });
 
-				deFields.forEach((option) => {
-					$('#select-id-dropdown').append($('<option>', {
-						value: option,
-						text: option
-					}));
-				});
+    // If there is no message selected, disable the next button
+    if (!message) {
+      showStep(null, 1);
+      connection.trigger('updateButton', { button: 'next', enabled: false });
+      // If there is a message, skip to the summary step
+    } else {
+      $('#select1')
+        .find('option[value=' + message + ']')
+        .attr('selected', 'selected');
+      $('#message').html(message);
+      showStep(null, 3);
+    }
+  }
 
-				$('#select-id').hide();
-				$('#select-id-dropdown').show();
-			} else {
-				$('#select-id-dropdown').hide();
-				$('#select-id').show();
-			}
-		} catch (e) {
-			console.error(e);
-			$('#select-id-dropdown').hide();
-			$('#select-id').show();
-		}
-	}
+  function onGetTokens(tokens) {
+    // Response: tokens = { token: <legacy token>, fuel2token: <fuel api token> }
+    // console.log(tokens);
+  }
 
-	function save () {
-		payload['arguments'] = payload['arguments'] || {};
-		payload['arguments'].execute = payload['arguments'].execute || {};
+  function onGetEndpoints(endpoints) {
+    // Response: endpoints = { restHost: <url> } i.e. "rest.s1.qa1.exacttarget.com"
+    // console.log(endpoints);
+  }
 
-		var idField = deFields.length > 0 ? $('#select-id-dropdown').val() : $('#select-id').val();
+  function onClickedNext() {
+    if (
+      (currentStep.key === 'step3' && steps[3].active === false) ||
+      currentStep.key === 'step4'
+    ) {
+      save();
+    } else {
+      connection.trigger('nextStep');
+    }
+  }
 
-		payload['arguments'].execute.inArguments = [{
-			'someField': '{{Event.' + eventDefinitionKey + '.\"' + idField + '\"}}'
-		}];
+  function onClickedBack() {
+    connection.trigger('prevStep');
+  }
 
-		payload['metaData'] = payload['metaData'] || {};
-		payload['metaData'].isConfigured = true;
+  function onGotoStep(step) {
+    showStep(step);
+    connection.trigger('ready');
+  }
 
-		console.log(JSON.stringify(payload));
+  function showStep(step, stepIndex) {
+    if (stepIndex && !step) {
+      step = steps[stepIndex - 1];
+    }
 
-		connection.trigger('updateActivity', payload);
-	}
+    currentStep = step;
 
-	connection.on('initActivity', initialize);
-	connection.on('clickedNext', onClickedNext);
-	connection.on('clickedBack', onClickedBack);
-	connection.on('gotoStep', onGotoStep);
-	connection.on('requestedInteraction', requestedInteractionHandler);
+    $('.step').hide();
 
+    switch (currentStep.key) {
+      case 'step1':
+        $('#step1').show();
+        connection.trigger('updateButton', {
+          button: 'next',
+          enabled: Boolean(getMessage()),
+        });
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: false,
+        });
+        break;
+      case 'step2':
+        $('#step2').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: true,
+        });
+        connection.trigger('updateButton', {
+          button: 'next',
+          text: 'next',
+          visible: true,
+        });
+        break;
+      case 'step3':
+        $('#step3').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: true,
+        });
+        if (lastStepEnabled) {
+          connection.trigger('updateButton', {
+            button: 'next',
+            text: 'next',
+            visible: true,
+          });
+        } else {
+          connection.trigger('updateButton', {
+            button: 'next',
+            text: 'done',
+            visible: true,
+          });
+        }
+        break;
+      case 'step4':
+        $('#step4').show();
+        break;
+    }
+  }
+
+  function save() {
+    var name = $('#select1').find('option:selected').html();
+    var value = getMessage();
+
+    // 'payload' is initialized on 'initActivity' above.
+    // Journey Builder sends an initial payload with defaults
+    // set by this activity's config.json file.  Any property
+    // may be overridden as desired.
+    payload.name = name;
+
+    payload['arguments'].execute.inArguments = [{ message: value }];
+
+    payload['metaData'].isConfigured = true;
+
+    connection.trigger('updateActivity', payload);
+  }
+
+  function getMessage() {
+    return $('#select1').find('option:selected').attr('value').trim();
+  }
 });
