@@ -38,23 +38,8 @@
     }
   },
   "wizardSteps": [
-    {
-      "label": "Step 1",
-      "key": "step1"
-    },
-    {
-      "label": "Step 2",
-      "key": "step2"
-    },
-    {
-      "label": "Step 3",
-      "key": "step3"
-    },
-    {
-      "label": "Step 4",
-      "key": "step4",
-      "active": false
-    }
+    { "key": "eventdefinitionkey", "label": "Event Definition Key" },
+    { "key": "idselection", "label": "ID Selection" }
   ],
   "userInterfaces": {
     "configModal": {
@@ -81,42 +66,10 @@
       }
     }
   ],
-  "schema": {
-    "arguments": {
-      "execute": {
-        "inArguments": [
-          {
-            "emailAddress": {
-              "dataType": "Email",
-              "isNullable": false,
-              "direction": "in"
-            }
-          }
-        ],
-        "outArguments": [
-          {
-            "foundSignupDate": {
-              "dataType": "Date",
-              "direction": "out",
-              "access": "visible"
-            }
-          }
-        ]
-      }
-    }
-  },
   "arguments": {
     "execute": {
-      "inArguments": [
-        {
-          "emailAddress": "{{InteractionDefaults.Email}}"
-        }
-      ],
-      "outArguments": [
-        {
-          "foundSignupDate": ""
-        }
-      ],
+      "inArguments": [],
+      "outArguments": [],
       "url": "https://custom-activity-postal.herokuapp.com/activity/execute",
       "verb": "POST",
       "body": "",
@@ -126,5 +79,10 @@
       "customerKey": "KRtWcxY6TbyBMHN0ishwkYnnt3ErZADWRREPb0kHFmW4cteVhx0ZHaXKKjApinBmCxl1bwKj8gWJOhiqblP1TkWrMHVe5UvAOmWUShM2T1vZTx1R802zbpMyCrABLarLORhXKErEK78WEOg6D7G-QcCdbILxo-sqMmIrLUfCY3yejw9wGFwS_qG56aFogjbA_1XZFTvFspRa-BWs53IAjijMTXh6DpEktG6PvEPIsXgxrDfBhnJrLjekYMd9KQ2",
       "timeout": 90000
     }
+  },
+  "edit": {
+    "url": "https://custom-activity-postal.herokuapp.com/index.html",
+    "height": 200,
+    "width": 500
   }
 }
