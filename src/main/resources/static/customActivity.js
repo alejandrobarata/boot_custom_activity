@@ -2,31 +2,106 @@
 
 define(function (require) {
   var Postmonger = require('postmonger');
+
   var connection = new Postmonger.Session();
   var payload = {};
+  var lastStepEnabled = false;
   var steps = [
-    { key: 'eventdefinitionkey', label: 'Event Definition Key' },
-    { key: 'idselection', label: 'ID Selection' },
+    // initialize to the same value as what's set in config.json for consistency
+    { label: 'Step 1', key: 'step1' },
+    { label: 'Step 2', key: 'step2' },
   ];
   var currentStep = steps[0].key;
-  var eventDefinitionKey = '';
-  var deFields = [];
 
-  $(window).ready(function () {
+  $(window).ready(onRender);
+
+  connection.on('initActivity', initialize);
+  connection.on('requestedTokens', onGetTokens);
+  connection.on('requestedEndpoints', onGetEndpoints);
+
+  connection.on('clickedNext', onClickedNext);
+  connection.on('clickedBack', onClickedBack);
+  connection.on('gotoStep', onGotoStep);
+
+  function onRender() {
+    // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
-    connection.trigger('requestInteraction');
-  });
+
+    connection.trigger('requestTokens');
+    connection.trigger('requestEndpoints');
+
+    // Disable the next button if a value isn't selected
+    $('#select1').change(function () {
+      var message = getMessage();
+      connection.trigger('updateButton', {
+        button: 'next',
+        enabled: Boolean(message),
+      });
+
+      $('#message').html(message);
+    });
+
+    // Toggle step 4 active/inactive
+    // If inactive, wizard hides it and skips over it during navigation
+    $('#toggleLastStep').click(function () {
+      lastStepEnabled = !lastStepEnabled; // toggle status
+      steps[3].active = !steps[3].active; // toggle active
+
+      connection.trigger('updateSteps', steps);
+    });
+  }
 
   function initialize(data) {
-    console.log('Entro');
-    console.log(data);
     if (data) {
       payload = data;
     }
+
+    var message;
+    var hasInArguments = Boolean(
+      payload['arguments'] &&
+        payload['arguments'].execute &&
+        payload['arguments'].execute.inArguments &&
+        payload['arguments'].execute.inArguments.length > 0
+    );
+
+    var inArguments = hasInArguments
+      ? payload['arguments'].execute.inArguments
+      : {};
+
+    $.each(inArguments, function (index, inArgument) {
+      $.each(inArgument, function (key, val) {
+        if (key === 'message') {
+          message = val;
+        }
+      });
+    });
+
+    // If there is no message selected, disable the next button
+    if (!message) {
+      showStep(null, 1);
+      connection.trigger('updateButton', { button: 'next', enabled: false });
+      // If there is a message, skip to the summary step
+    } else {
+      $('#select1')
+        .find('option[value=' + message + ']')
+        .attr('selected', 'selected');
+      $('#message').html(message);
+      showStep(null, 3);
+    }
+  }
+
+  function onGetTokens(tokens) {
+    // Response: tokens = { token: <legacy token>, fuel2token: <fuel api token> }
+    console.log(tokens);
+  }
+
+  function onGetEndpoints(endpoints) {
+    // Response: endpoints = { restHost: <url> } i.e. "rest.s1.qa1.exacttarget.com"
+    console.log(endpoints);
   }
 
   function onClickedNext() {
-    if (currentStep.key === 'idselection') {
+    if (currentStep.key === 'step2') {
       save();
     } else {
       connection.trigger('nextStep');
@@ -52,96 +127,73 @@ define(function (require) {
     $('.step').hide();
 
     switch (currentStep.key) {
-      case 'eventdefinitionkey':
+      case 'step1':
         $('#step1').show();
-        $('#step1 input').focus();
-        break;
-      case 'idselection':
-        $('#step2').show();
-        $('#step2 input').focus();
-        break;
-    }
-  }
-
-  function requestedInteractionHandler(settings) {
-    try {
-      eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
-      $('#select-entryevent-defkey').val(eventDefinitionKey);
-
-      if (
-        settings.triggers[0].type === 'SalesforceObjectTriggerV2' &&
-        settings.triggers[0].configurationArguments &&
-        settings.triggers[0].configurationArguments.eventDataConfig
-      ) {
-        // This workaround is necessary as Salesforce occasionally returns the eventDataConfig-object as string
-        if (
-          typeof settings.triggers[0].configurationArguments.eventDataConfig ===
-            'string' ||
-          !settings.triggers[0].configurationArguments.eventDataConfig.objects
-        ) {
-          settings.triggers[0].configurationArguments.eventDataConfig = JSON.parse(
-            settings.triggers[0].configurationArguments.eventDataConfig
-          );
-        }
-
-        settings.triggers[0].configurationArguments.eventDataConfig.objects.forEach(
-          (obj) => {
-            deFields = deFields.concat(
-              obj.fields.map((fieldName) => {
-                return obj.dePrefix + fieldName;
-              })
-            );
-          }
-        );
-
-        deFields.forEach((option) => {
-          $('#select-id-dropdown').append(
-            $('<option>', {
-              value: option,
-              text: option,
-            })
-          );
+        connection.trigger('updateButton', {
+          button: 'next',
+          enabled: Boolean(getMessage()),
         });
-
-        $('#select-id').hide();
-        $('#select-id-dropdown').show();
-      } else {
-        $('#select-id-dropdown').hide();
-        $('#select-id').show();
-      }
-    } catch (e) {
-      console.error(e);
-      $('#select-id-dropdown').hide();
-      $('#select-id').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: false,
+        });
+        break;
+      case 'step2':
+        $('#step2').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: true,
+        });
+        connection.trigger('updateButton', {
+          button: 'next',
+          text: 'next',
+          visible: true,
+        });
+        break;
+      case 'step3':
+        $('#step3').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: true,
+        });
+        if (lastStepEnabled) {
+          connection.trigger('updateButton', {
+            button: 'next',
+            text: 'next',
+            visible: true,
+          });
+        } else {
+          connection.trigger('updateButton', {
+            button: 'next',
+            text: 'done',
+            visible: true,
+          });
+        }
+        break;
+      case 'step4':
+        $('#step4').show();
+        break;
     }
   }
 
   function save() {
-    payload['arguments'] = payload['arguments'] || {};
-    payload['arguments'].execute = payload['arguments'].execute || {};
+    var name = $('#select1').find('option:selected').html();
+    var value = getMessage();
 
-    var idField =
-      deFields.length > 0
-        ? $('#select-id-dropdown').val()
-        : $('#select-id').val();
+    // 'payload' is initialized on 'initActivity' above.
+    // Journey Builder sends an initial payload with defaults
+    // set by this activity's config.json file.  Any property
+    // may be overridden as desired.
+    payload.name = name;
 
-    payload['arguments'].execute.inArguments = [
-      {
-        someField: '{{Event.' + eventDefinitionKey + '."' + idField + '"}}',
-      },
-    ];
+    payload['arguments'].execute.inArguments = [{ message: value }];
 
-    payload['metaData'] = payload['metaData'] || {};
     payload['metaData'].isConfigured = true;
-
-    console.log(JSON.stringify(payload));
 
     connection.trigger('updateActivity', payload);
   }
 
-  connection.on('initActivity', initialize);
-  connection.on('clickedNext', onClickedNext);
-  connection.on('clickedBack', onClickedBack);
-  connection.on('gotoStep', onGotoStep);
-  connection.on('requestedInteraction', requestedInteractionHandler);
+  function getMessage() {
+    return $('#select1').find('option:selected').attr('value').trim();
+  }
 });
