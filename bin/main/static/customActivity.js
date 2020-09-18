@@ -64,6 +64,7 @@ define(function (require) {
   }
 
   function requestedInteractionHandler(settings) {
+    console.log(settings);
     try {
       eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
       $('#select-entryevent-defkey').val(eventDefinitionKey);
