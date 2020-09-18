@@ -52,6 +52,8 @@ define(['postmonger'], function (Postmonger) {
   }
 
   function initialize(data) {
+    console.log('Entro');
+    console.log(data);
     if (data) {
       payload = data;
     }
