@@ -28,7 +28,7 @@ public class ActivityController {
     public ResponseEntity<String> validate(@RequestBody Map<String, Object> payload) {
         System.out.println("validate");
         System.out.println(payload);
-        return new ResponseEntity<>("Validate", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Validate", HttpStatus.OK);
     }
 
     @PostMapping("/stop")
