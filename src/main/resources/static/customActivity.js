@@ -41,15 +41,6 @@ define(function (require) {
 
       $('#message').html(message);
     });
-
-    // Toggle step 4 active/inactive
-    // If inactive, wizard hides it and skips over it during navigation
-    $('#toggleLastStep').click(function () {
-      lastStepEnabled = !lastStepEnabled; // toggle status
-      steps[3].active = !steps[3].active; // toggle active
-
-      connection.trigger('updateSteps', steps);
-    });
   }
 
   function initialize(data) {
@@ -93,12 +84,12 @@ define(function (require) {
 
   function onGetTokens(tokens) {
     // Response: tokens = { token: <legacy token>, fuel2token: <fuel api token> }
-    console.log(tokens);
+    // console.log(tokens);
   }
 
   function onGetEndpoints(endpoints) {
     // Response: endpoints = { restHost: <url> } i.e. "rest.s1.qa1.exacttarget.com"
-    console.log(endpoints);
+    // console.log(endpoints);
   }
 
   function onClickedNext() {
@@ -122,8 +113,6 @@ define(function (require) {
     if (stepIndex && !step) {
       step = steps[stepIndex - 1];
     }
-
-    console.log('Step ==> ' + step);
 
     currentStep = step;
 
@@ -159,22 +148,13 @@ define(function (require) {
           button: 'back',
           visible: true,
         });
-        if (lastStepEnabled) {
-          connection.trigger('updateButton', {
-            button: 'next',
-            text: 'next',
-            visible: true,
-          });
-        } else {
-          connection.trigger('updateButton', {
-            button: 'next',
-            text: 'done',
-            visible: true,
-          });
-        }
-        break;
-      case 'step4':
-        $('#step4').show();
+
+        connection.trigger('updateButton', {
+          button: 'next',
+          text: 'done',
+          visible: true,
+        });
+
         break;
     }
   }
@@ -192,8 +172,6 @@ define(function (require) {
     payload['arguments'].execute.inArguments = [{ message: value }];
 
     payload['metaData'].isConfigured = true;
-
-    console.table(payload);
 
     connection.trigger('updateActivity', payload);
   }

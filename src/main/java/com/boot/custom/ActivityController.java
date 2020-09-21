@@ -25,6 +25,7 @@ public class ActivityController {
     @PostMapping("/validate")
     public ResponseEntity<String> validate(@RequestBody Map<String, Object> payload) {
         System.out.println("validate");
+        System.out.println(payload);
         return new ResponseEntity<>("Validate", HttpStatus.BAD_REQUEST);
     }
 
@@ -37,7 +38,6 @@ public class ActivityController {
     @PostMapping("/execute")
     public ActivityResult execute(@RequestBody ExecutePayload payload) {
         System.out.println("execute");
-        System.out.println(payload);
         for (Map<String, String> inArgument : payload.getInArguments()) {
             if (inArgument.containsKey("status") && inArgument.get("status").equals("true")) {
                 return new ActivityResult("true");
