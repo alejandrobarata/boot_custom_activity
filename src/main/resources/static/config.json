@@ -39,7 +39,7 @@
   },
   "wizardSteps": [
     {
-      "label": "Step 1",
+      "label": "Canal",
       "key": "step1"
     },
     {
@@ -57,18 +57,18 @@
   "outcomes": [
     {
       "arguments": {
-        "branchResult": "<KEY FOR PATH 1>"
+        "branchResult": "true"
       },
       "metaData": {
-        "label": "<LABEL FOR PATH 1>"
+        "label": "True código postal"
       }
     },
     {
       "arguments": {
-        "branchResult": "<KEY FOR PATH 2>"
+        "branchResult": "false"
       },
       "metaData": {
-        "label": "<LABEL FOR PATH 2>"
+        "label": "False código postal"
       }
     }
   ],
