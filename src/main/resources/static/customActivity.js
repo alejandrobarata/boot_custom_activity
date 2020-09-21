@@ -24,6 +24,8 @@ define(function (require) {
   connection.on('clickedBack', onClickedBack);
   connection.on('gotoStep', onGotoStep);
 
+  connection.on('requestedInteraction', requestedInteractionHandler);
+
   function onRender() {
     // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
@@ -157,6 +159,11 @@ define(function (require) {
 
         break;
     }
+  }
+
+  function requestedInteractionHandler(settings) {
+    console.log('requestedInteractionHandler');
+    console.log(settings);
   }
 
   function save() {

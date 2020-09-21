@@ -78,16 +78,8 @@
   ],
   "arguments": {
     "execute": {
-      "inArguments": [
-        {
-          "emailAddress": "{{InteractionDefaults.Email}}"
-        }
-      ],
-      "outArguments": [
-        {
-          "foundSignupDate": ""
-        }
-      ],
+      "inArguments": [],
+      "outArguments": [],
       "url": "https://custom-activity-postal.herokuapp.com/activity/execute",
       "verb": "POST",
       "body": "",
@@ -102,29 +94,5 @@
     "url": "https://custom-activity-postal.herokuapp.com/index.html",
     "height": 200,
     "width": 500
-  },
-  "schema": {
-    "arguments": {
-      "execute": {
-        "inArguments": [
-          {
-            "emailAddress": {
-              "dataType": "Email",
-              "isNullable": false,
-              "direction": "in"
-            }
-          }
-        ],
-        "outArguments": [
-          {
-            "foundSignupDate": {
-              "dataType": "Date",
-              "direction": "out",
-              "access": "visible"
-            }
-          }
-        ]
-      }
-    }
   }
 }
