@@ -30,8 +30,10 @@ define(function (require) {
     // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
 
-    connection.trigger('requestTokens');
-    connection.trigger('requestEndpoints');
+    connection.trigger('requestInteraction');
+
+    // connection.trigger('requestTokens');
+    // connection.trigger('requestEndpoints');
 
     // Disable the next button if a value isn't selected
     $('#select1').change(function () {
