@@ -160,6 +160,7 @@ define(function (require) {
   }
 
   function save() {
+    console.log('Old ==> ' + payload);
     var name = $('#select1').find('option:selected').html();
     var value = getMessage();
 
@@ -172,6 +173,8 @@ define(function (require) {
     payload['arguments'].execute.inArguments = [{ message: value }];
 
     payload['metaData'].isConfigured = true;
+
+    console.log('New ==> ' + payload);
 
     connection.trigger('updateActivity', payload);
   }
