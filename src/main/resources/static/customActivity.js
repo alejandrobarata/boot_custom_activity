@@ -101,7 +101,7 @@ define(function (require) {
   }
 
   function onClickedNext() {
-    if (currentStep.key === 'step2') {
+    if (currentStep.key === 'step3') {
       save();
     } else {
       connection.trigger('nextStep');
@@ -189,6 +189,8 @@ define(function (require) {
     payload['arguments'].execute.inArguments = [{ message: value }];
 
     payload['metaData'].isConfigured = true;
+
+    console.table(payload);
 
     connection.trigger('updateActivity', payload);
   }
