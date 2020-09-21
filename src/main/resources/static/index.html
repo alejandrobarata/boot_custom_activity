@@ -36,7 +36,19 @@
         <option value="telefono">Teléfono</option>
       </select>
     </div>
-    <div id="step2" class="step">Segundo paso</div>
+    <div id="step2" class="step">
+      <p>
+        Please select the ID (event data column) to pass to the custom split
+        backend.
+      </p>
+      <p class="inputLabel">ID</p>
+      <input
+        id="select-id"
+        placeholder="ID to pass to the backend"
+        type="text"
+      />
+      <select id="select-id-dropdown"></select>
+    </div>
     <div id="step3" class="step">
       Canal seleccionado:
       <div id="message"></div>

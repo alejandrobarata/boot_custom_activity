@@ -164,8 +164,56 @@ define(function (require) {
   }
 
   function requestedInteractionHandler(settings) {
-    console.log('requestedInteractionHandler');
-    console.log(settings);
+    try {
+      /*eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
+      $('#select-entryevent-defkey').val(eventDefinitionKey);*/
+
+      if (
+        settings.triggers[0].type === 'SalesforceObjectTriggerV2' &&
+        settings.triggers[0].configurationArguments &&
+        settings.triggers[0].configurationArguments.eventDataConfig
+      ) {
+        // This workaround is necessary as Salesforce occasionally returns the eventDataConfig-object as string
+        if (
+          typeof settings.triggers[0].configurationArguments.eventDataConfig ===
+            'string' ||
+          !settings.triggers[0].configurationArguments.eventDataConfig.objects
+        ) {
+          settings.triggers[0].configurationArguments.eventDataConfig = JSON.parse(
+            settings.triggers[0].configurationArguments.eventDataConfig
+          );
+        }
+
+        settings.triggers[0].configurationArguments.eventDataConfig.objects.forEach(
+          (obj) => {
+            deFields = deFields.concat(
+              obj.fields.map((fieldName) => {
+                return obj.dePrefix + fieldName;
+              })
+            );
+          }
+        );
+
+        deFields.forEach((option) => {
+          $('#select-id-dropdown').append(
+            $('<option>', {
+              value: option,
+              text: option,
+            })
+          );
+        });
+
+        $('#select-id').hide();
+        $('#select-id-dropdown').show();
+      } else {
+        $('#select-id-dropdown').hide();
+        $('#select-id').show();
+      }
+    } catch (e) {
+      console.error(e);
+      $('#select-id-dropdown').hide();
+      $('#select-id').show();
+    }
   }
 
   function save() {
