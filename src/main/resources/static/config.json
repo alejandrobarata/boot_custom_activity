@@ -45,6 +45,10 @@
     {
       "label": "Step 2",
       "key": "step2"
+    },
+    {
+      "label": "Info",
+      "key": "step3"
     }
   ],
   "userInterfaces": {
