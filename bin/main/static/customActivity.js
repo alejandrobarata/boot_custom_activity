@@ -8,8 +8,9 @@ define(function (require) {
   var lastStepEnabled = false;
   var steps = [
     // initialize to the same value as what's set in config.json for consistency
-    { label: 'Step 1', key: 'step1' },
+    { label: 'Canal', key: 'step1' },
     { label: 'Step 2', key: 'step2' },
+    { label: 'Info', key: 'step3' },
   ];
   var currentStep = steps[0].key;
 
