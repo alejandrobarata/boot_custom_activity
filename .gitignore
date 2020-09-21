@@ -112,4 +112,7 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
+# Ignore bin folder
+**/bin/
+
 # End of https://www.gitignore.io/api/gradle,java-web,intellij+all
