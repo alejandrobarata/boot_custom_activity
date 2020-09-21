@@ -13,12 +13,14 @@ public class ActivityController {
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody Map<String, Object> payload) {
         System.out.println("save");
+        System.out.println(payload);
         return new ResponseEntity<>("Save", HttpStatus.OK);
     }
 
     @PostMapping("/publish")
     public ResponseEntity<String> publish(@RequestBody Map<String, Object> payload) {
         System.out.println("publish");
+        System.out.println(payload);
         return new ResponseEntity<>("Publish", HttpStatus.OK);
     }
 
@@ -31,7 +33,8 @@ public class ActivityController {
 
     @PostMapping("/stop")
     public ResponseEntity<String> stop(@RequestBody Map<String, Object> payload) {
-        System.out.println("validate");
+        System.out.println("stop");
+        System.out.println(payload);
         return new ResponseEntity<>("Stop", HttpStatus.OK);
     }
 
