@@ -234,9 +234,6 @@ define(function (require) {
       {
         emailAddress: '{{InteractionDefaults.Email}}',
       },
-      {
-        codigoPostal: '{{Contact.Default.CodigoPostal}}',
-      },
     ];
 
     payload['metaData'].isConfigured = true;
