@@ -111,6 +111,13 @@
             }
           },
           {
+            "codigoPostal": {
+              "dataType": "Number",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
             "canal": {
               "dataType": "String",
               "isNullable": false,
