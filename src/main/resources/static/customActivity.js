@@ -217,7 +217,6 @@ define(function (require) {
   }
 
   function save() {
-    console.log('Old ==> ' + payload);
     var name = $('#select1').find('option:selected').html();
     var value = getMessage();
 
@@ -227,11 +226,11 @@ define(function (require) {
     // may be overridden as desired.
     payload.name = name;
 
-    // payload['arguments'].execute.inArguments = [{ message: value }];
+    // payload['arguments'].execute.inArguments.push = [{ message: value }];
 
     payload['metaData'].isConfigured = true;
 
-    console.log('New ==> ' + payload);
+    console.log(JSON.stringify(payload));
 
     connection.trigger('updateActivity', payload);
   }
