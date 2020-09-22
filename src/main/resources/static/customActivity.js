@@ -226,7 +226,14 @@ define(function (require) {
     // may be overridden as desired.
     payload.name = name;
 
-    // payload['arguments'].execute.inArguments.push = [{ message: value }];
+    payload['arguments'].execute.inArguments = [
+      {
+        message: value,
+      },
+      {
+        emailAddress: '{{InteractionDefaults.Email}}',
+      },
+    ];
 
     payload['metaData'].isConfigured = true;
 

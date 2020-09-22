@@ -78,11 +78,7 @@
   ],
   "arguments": {
     "execute": {
-      "inArguments": [
-        {
-          "emailAddress": "{{InteractionDefaults.Email}}"
-        }
-      ],
+      "inArguments": [],
       "outArguments": [
         {
           "branchResult": ""
@@ -110,6 +106,13 @@
           {
             "emailAddress": {
               "dataType": "Email",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
+            "message": {
+              "dataType": "String",
               "isNullable": false,
               "direction": "in"
             }
