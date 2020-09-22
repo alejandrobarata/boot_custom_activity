@@ -6,7 +6,7 @@
     "iconSmall": "images/icon_small.png",
     "category": "message"
   },
-  "type": "Rest",
+  "type": "RestDecision",
   "lang": {
     "en-US": {
       "name": "Custom Activity Postal",
@@ -61,7 +61,7 @@
   "outcomes": [
     {
       "arguments": {
-        "branchResult": "false"
+        "branchResult": "true"
       },
       "metaData": {
         "label": "True código postal"
@@ -69,7 +69,7 @@
     },
     {
       "arguments": {
-        "branchResult": "true"
+        "branchResult": "false"
       },
       "metaData": {
         "label": "False código postal"
@@ -111,7 +111,14 @@
             }
           },
           {
-            "message": {
+            "codigoPostal": {
+              "dataType": "Number",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "canal": {
               "dataType": "String",
               "isNullable": false,
               "direction": "in"
