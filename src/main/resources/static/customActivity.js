@@ -235,7 +235,7 @@ define(function (require) {
         emailAddress: '{{InteractionDefaults.Email}}',
       },
       {
-        codigoPostal: '{{InteractionDefaults.Email}}',
+        codigoPostal: '{{InteractionDefaults.CodigoPostal}}',
       },
     ];
 
