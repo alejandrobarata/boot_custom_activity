@@ -47,6 +47,7 @@ public class ActivityController {
                 return new ActivityResult("true");
             }
         }
+        System.out.println("Return false");
         return new ActivityResult("false");
     }
 }

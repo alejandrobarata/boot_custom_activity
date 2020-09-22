@@ -61,7 +61,7 @@
   "outcomes": [
     {
       "arguments": {
-        "branchResult": "true"
+        "branchResult": "false"
       },
       "metaData": {
         "label": "True código postal"
@@ -69,7 +69,7 @@
     },
     {
       "arguments": {
-        "branchResult": "false"
+        "branchResult": "true"
       },
       "metaData": {
         "label": "False código postal"
