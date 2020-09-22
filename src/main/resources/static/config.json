@@ -121,7 +121,7 @@
         "outArguments": [
           {
             "branchResult": {
-              "dataType": "Boolean",
+              "dataType": "String",
               "direction": "out",
               "access": "visible"
             }

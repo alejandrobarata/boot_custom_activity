@@ -37,13 +37,14 @@ define(function (require) {
 
     // Disable the next button if a value isn't selected
     $('#select1').change(function () {
-      var message = getMessage();
+      var canal = getCanal();
       connection.trigger('updateButton', {
         button: 'next',
-        enabled: Boolean(message),
+        enabled: Boolean(canal),
       });
+      console.log('Boolean ==> ' + Boolean(canal));
 
-      $('#message').html(message);
+      $('#canal').html(canal);
     });
   }
 
@@ -52,7 +53,7 @@ define(function (require) {
       payload = data;
     }
 
-    var message;
+    var canal;
     var hasInArguments = Boolean(
       payload['arguments'] &&
         payload['arguments'].execute &&
@@ -66,34 +67,34 @@ define(function (require) {
 
     $.each(inArguments, function (index, inArgument) {
       $.each(inArgument, function (key, val) {
-        if (key === 'message') {
-          message = val;
+        if (key === 'canal') {
+          canal = val;
         }
       });
     });
 
-    // If there is no message selected, disable the next button
-    if (!message) {
+    // If there is no canal selected, disable the next button
+    if (!canal) {
       showStep(null, 1);
       connection.trigger('updateButton', { button: 'next', enabled: false });
-      // If there is a message, skip to the summary step
+      // If there is a canal, skip to the summary step
     } else {
       $('#select1')
-        .find('option[value=' + message + ']')
+        .find('option[value=' + canal + ']')
         .attr('selected', 'selected');
-      $('#message').html(message);
+      $('#canal').html(canal);
       showStep(null, 3);
     }
   }
 
   function onGetTokens(tokens) {
     // Response: tokens = { token: <legacy token>, fuel2token: <fuel api token> }
-    // console.log(tokens);
+    console.log(tokens);
   }
 
   function onGetEndpoints(endpoints) {
     // Response: endpoints = { restHost: <url> } i.e. "rest.s1.qa1.exacttarget.com"
-    // console.log(endpoints);
+    console.log(endpoints);
   }
 
   function onClickedNext() {
@@ -127,7 +128,7 @@ define(function (require) {
         $('#step1').show();
         connection.trigger('updateButton', {
           button: 'next',
-          enabled: Boolean(getMessage()),
+          enabled: Boolean(getCanal()),
         });
         connection.trigger('updateButton', {
           button: 'back',
@@ -218,7 +219,7 @@ define(function (require) {
 
   function save() {
     var name = $('#select1').find('option:selected').html();
-    var value = getMessage();
+    var value = getCanal();
 
     // 'payload' is initialized on 'initActivity' above.
     // Journey Builder sends an initial payload with defaults
@@ -228,21 +229,22 @@ define(function (require) {
 
     payload['arguments'].execute.inArguments = [
       {
-        message: value,
+        canal: value,
       },
       {
         emailAddress: '{{InteractionDefaults.Email}}',
+      },
+      {
+        codigoPostal: '{{InteractionDefaults.Email}}',
       },
     ];
 
     payload['metaData'].isConfigured = true;
 
-    console.log(JSON.stringify(payload));
-
     connection.trigger('updateActivity', payload);
   }
 
-  function getMessage() {
+  function getCanal() {
     return $('#select1').find('option:selected').attr('value').trim();
   }
 });
