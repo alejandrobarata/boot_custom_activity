@@ -42,7 +42,6 @@ define(function (require) {
         button: 'next',
         enabled: Boolean(canal),
       });
-      console.log('Boolean ==> ' + Boolean(canal));
 
       $('#canal').html(canal);
     });
@@ -89,12 +88,12 @@ define(function (require) {
 
   function onGetTokens(tokens) {
     // Response: tokens = { token: <legacy token>, fuel2token: <fuel api token> }
-    console.log('tokens ==> ' + tokens);
+    //console.log('tokens ==> ' + tokens);
   }
 
   function onGetEndpoints(endpoints) {
     // Response: endpoints = { restHost: <url> } i.e. "rest.s1.qa1.exacttarget.com"
-    console.log('endpoints ==> ' + endpoints);
+    //console.log('endpoints ==> ' + endpoints);
   }
 
   function onClickedNext() {
@@ -165,7 +164,7 @@ define(function (require) {
   }
 
   function requestedInteractionHandler(settings) {
-    console.log(JSON.stringify(settings));
+    // console.log(JSON.stringify(settings));
     eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
   }
 
@@ -187,11 +186,7 @@ define(function (require) {
         emailAddress: '{{InteractionDefaults.Email}}',
       },
       {
-        codigoPostal: '{{Contact.Attribute.TestCA.CodigoPostal}}',
-      },
-      {
-        codigoPostalEvent:
-          '{{Event.' + eventDefinitionKey + '."CodigoPostal"}}',
+        codigoPostal: '{{Event.' + eventDefinitionKey + '."CodigoPostal"}}',
       },
     ];
 
