@@ -65,12 +65,11 @@ define(function (require) {
         enabled: Boolean(canal),
       });
 
-      $('#codigoTexto').html(codigo);
+      $('#codigoTexto').html(codigoPlantilla);
     });
   }
 
   function initialize(data) {
-    console.log('initialize');
     if (data) {
       payload = data;
     }
@@ -101,7 +100,7 @@ define(function (require) {
     load_json_data('canal', 0, canal);
 
     // If there is no canal selected, disable the next button
-    if (!canal || !codigo) {
+    if (!canal || !codigoPlantilla) {
       showStep(null, 1);
       connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
