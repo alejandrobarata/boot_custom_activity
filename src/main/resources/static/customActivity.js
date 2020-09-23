@@ -9,7 +9,7 @@ define(function (require) {
   var steps = [
     // initialize to the same value as what's set in config.json for consistency
     { label: 'Canal', key: 'step1' },
-    { label: 'Step 2', key: 'step2' },
+    { label: 'Código plantilla', key: 'step2' },
     { label: 'Info', key: 'step3' },
   ];
   var currentStep = steps[0].key;
@@ -35,15 +35,25 @@ define(function (require) {
     // connection.trigger('requestTokens');
     // connection.trigger('requestEndpoints');
 
+    load_json_data('canal');
+
     // Disable the next button if a value isn't selected
-    $('#select1').change(function () {
-      var canal = getCanal();
+    $('#canal').change(function () {
+      var canal = getSelect('canal');
+      var codigo = getSelect('codigo');
+
       connection.trigger('updateButton', {
         button: 'next',
         enabled: Boolean(canal),
       });
 
-      $('#canal').html(canal);
+      if (canal != '') {
+        load_json_data('código', canal);
+      } else {
+        $('#codigo').html('<option value="">Select código</option>');
+      }
+
+      $('#canalTexto').html(canal);
     });
   }
 
@@ -53,6 +63,7 @@ define(function (require) {
     }
 
     var canal;
+    var codigo;
     var hasInArguments = Boolean(
       payload['arguments'] &&
         payload['arguments'].execute &&
@@ -69,19 +80,28 @@ define(function (require) {
         if (key === 'canal') {
           canal = val;
         }
+        if (key === 'codigoPlantilla') {
+          codigo = val;
+        }
       });
     });
 
     // If there is no canal selected, disable the next button
-    if (!canal) {
+    if (!canal || !codigo) {
       showStep(null, 1);
       connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
     } else {
-      $('#select1')
+      $('#canal')
         .find('option[value=' + canal + ']')
         .attr('selected', 'selected');
-      $('#canal').html(canal);
+      $('#canalTexto').html(canal);
+
+      $('#codigo')
+        .find('option[value=' + codigo + ']')
+        .attr('selected', 'selected');
+      $('#codigoTexto').html(codigo);
+
       showStep(null, 3);
     }
   }
@@ -127,7 +147,7 @@ define(function (require) {
         $('#step1').show();
         connection.trigger('updateButton', {
           button: 'next',
-          enabled: Boolean(getCanal()),
+          enabled: Boolean(getSelect('canal')),
         });
         connection.trigger('updateButton', {
           button: 'back',
@@ -144,6 +164,7 @@ define(function (require) {
           button: 'next',
           text: 'next',
           visible: true,
+          enabled: Boolean(getSelect('codigo')),
         });
         break;
       case 'step3':
@@ -169,8 +190,9 @@ define(function (require) {
   }
 
   function save() {
-    var name = $('#select1').find('option:selected').html();
-    var value = getCanal();
+    var name = $('#canal').find('option:selected').html();
+    var canal = getSelect('canal');
+    var codigo = getSelect('codigo');
 
     // 'payload' is initialized on 'initActivity' above.
     // Journey Builder sends an initial payload with defaults
@@ -180,7 +202,10 @@ define(function (require) {
 
     payload['arguments'].execute.inArguments = [
       {
-        canal: value,
+        canal: canal,
+      },
+      {
+        codigoPlantilla: codigo,
       },
       {
         emailAddress: '{{InteractionDefaults.Email}}',
@@ -195,7 +220,31 @@ define(function (require) {
     connection.trigger('updateActivity', payload);
   }
 
-  function getCanal() {
-    return $('#select1').find('option:selected').attr('value').trim();
+  function getSelect(id) {
+    return $('#' + id)
+      .find('option:selected')
+      .attr('value')
+      .trim();
+  }
+
+  function load_json_data(id, parent_id) {
+    var html_code = '';
+    $.getJSON('canal.json', function (data) {
+      html_code += '<option value="">Select ' + id + '</option>';
+      $.each(data, function (key, value) {
+        if (id == 'canal') {
+          if (value.parent_id == '0') {
+            html_code +=
+              '<option value="' + value.id + '">' + value.name + '</option>';
+          }
+        } else {
+          if (value.parent_id == parent_id) {
+            html_code +=
+              '<option value="' + value.id + '">' + value.name + '</option>';
+          }
+        }
+      });
+      $('#' + id).html(html_code);
+    });
   }
 });
