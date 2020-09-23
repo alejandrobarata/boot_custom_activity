@@ -104,6 +104,9 @@ define(function (require) {
       connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
     } else {
+      console.log('Seleccionar ==> ' + canal);
+      console.log('Size ==> ' + $('#canal option').length);
+
       $('#canal')
         .find('option[value=' + canal + ']')
         .attr('selected', 'selected');
