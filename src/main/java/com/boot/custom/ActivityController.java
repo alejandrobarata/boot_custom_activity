@@ -40,7 +40,7 @@ public class ActivityController {
 
     @PostMapping("/execute")
     public ActivityResult execute(@RequestBody ExecutePayload payload) {
-        System.out.println(payload.getInArguments());
+        System.out.println(payload);
 
         Map<String, String> inArgument = payload.getInArguments()[0];
 
