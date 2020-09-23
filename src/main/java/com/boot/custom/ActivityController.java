@@ -43,6 +43,11 @@ public class ActivityController {
         System.out.println(payload);
 
         Map<String, String> inArgument = payload.getInArguments()[0];
+        System.out.println(inArgument);
+
+        for (Map<String, String> inArgumentAux : payload.getInArguments()) {
+            System.out.println(inArgumentAux);
+        }
 
         // System.out.println(inArgument.get(key));
         if (inArgument != null) {
