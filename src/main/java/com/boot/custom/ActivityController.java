@@ -41,11 +41,16 @@ public class ActivityController {
     @PostMapping("/execute")
     public ActivityResult execute(@RequestBody ExecutePayload payload) {
         System.out.println(payload);
-        for (Map<String, String> inArgument : payload.getInArguments()) {
-            if (inArgument.containsKey("status") && inArgument.get("status").equals("true")) {
-                return new ActivityResult("true");
+
+        Map<String, String> inArgument = payload.getInArguments()[0];
+
+        // System.out.println(inArgument.get(key));
+        if (inArgument != null) {
+            if (inArgument.containsKey("codigoPostal")) {
+                System.out.println(inArgument.get("codigoPostal"));
             }
         }
+
         return new ActivityResult("false");
     }
 }
