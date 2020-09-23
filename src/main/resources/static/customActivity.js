@@ -262,7 +262,9 @@ define(function (require) {
         $('#' + id)
           .find('option[value=' + currentValue + ']')
           .attr('selected', 'selected');
-        $('#' + id).trigger('change');
+        if (id == 'canal') {
+          $('#' + id).trigger('change');
+        }
       }
     });
   }
