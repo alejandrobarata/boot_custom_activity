@@ -1,14 +1,24 @@
 package com.boot.custom;
 
+import java.util.Map;
+
+import com.boot.consumingrest.Quote;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
+
+    private static final Logger log = LoggerFactory.getLogger(ActivityController.class);
 
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody Map<String, Object> payload) {
@@ -41,20 +51,24 @@ public class ActivityController {
     @PostMapping("/execute")
     public ActivityResult execute(@RequestBody ExecutePayload payload) {
         System.out.println(payload);
-
-        Map<String, String> inArgument = payload.getInArguments()[0];
-        System.out.println(inArgument);
-
-        for (Map<String, String> inArgumentAux : payload.getInArguments()) {
-            System.out.println(inArgumentAux);
-        }
-
-        // System.out.println(inArgument.get(key));
-        if (inArgument != null) {
+        String canal;
+        String codigoPlantilla;
+        String codigoPostal;
+        for (Map<String, String> inArgument : payload.getInArguments()) {
             if (inArgument.containsKey("codigoPostal")) {
-                System.out.println(inArgument.get("codigoPostal"));
+                codigoPostal = inArgument.get("codigoPostal");
+            }
+            if (inArgument.containsKey("canal")) {
+                canal = inArgument.get("canal");
+            }
+            if (inArgument.containsKey("codigoPlantilla")) {
+                codigoPlantilla = inArgument.get("codigoPlantilla");
             }
         }
+
+        RestTemplate restTemplate = new RestTemplate();
+        Quote quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+        log.info(quote.toString());
 
         return new ActivityResult("false");
     }
