@@ -4,8 +4,6 @@ import java.util.Map;
 
 import com.boot.consumingrest.Quote;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
-
-    private static final Logger log = LoggerFactory.getLogger(ActivityController.class);
 
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody Map<String, Object> payload) {
@@ -68,7 +64,7 @@ public class ActivityController {
 
         RestTemplate restTemplate = new RestTemplate();
         Quote quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-        log.info(quote.toString());
+        System.out.println(quote.toString());
 
         return new ActivityResult("false");
     }
