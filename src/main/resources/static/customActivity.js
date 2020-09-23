@@ -14,6 +14,9 @@ define(function (require) {
   ];
   var currentStep = steps[0].key;
 
+  var canal = '';
+  var codigoPlantilla = '';
+
   $(window).ready(onRender);
 
   connection.on('initActivity', initialize);
@@ -36,11 +39,11 @@ define(function (require) {
     // connection.trigger('requestTokens');
     // connection.trigger('requestEndpoints');
 
-    load_json_data('canal');
+    load_json_data('canal', 0, canal);
 
     // Disable the next button if a value isn't selected
     $('#canal').change(function () {
-      var canal = getSelect('canal');
+      canal = getSelect('canal');
 
       connection.trigger('updateButton', {
         button: 'next',
@@ -48,7 +51,7 @@ define(function (require) {
       });
 
       if (canal != '') {
-        load_json_data('codigo', canal);
+        load_json_data('codigo', canal, codigoPlantilla);
       } else {
         $('#codigo').html('<option value="">--</option>');
       }
@@ -57,7 +60,7 @@ define(function (require) {
     });
     // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
-      var codigo = getSelect('codigo');
+      codigoPlantilla = getSelect('codigo');
 
       connection.trigger('updateButton', {
         button: 'next',
@@ -74,8 +77,6 @@ define(function (require) {
       payload = data;
     }
 
-    var canal;
-    var codigo;
     var hasInArguments = Boolean(
       payload['arguments'] &&
         payload['arguments'].execute &&
@@ -93,7 +94,7 @@ define(function (require) {
           canal = val;
         }
         if (key === 'codigoPlantilla') {
-          codigo = val;
+          codigoPlantilla = val;
         }
       });
     });
@@ -104,19 +105,16 @@ define(function (require) {
       connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
     } else {
-      console.log('Seleccionar ==> ' + canal);
-      console.log('Size ==> ' + $('#canal option').length);
-
-      $('#canal')
+      /*$('#canal')
         .find('option[value=' + canal + ']')
         .attr('selected', 'selected');
 
       $('#codigo')
         .find('option[value=' + codigo + ']')
-        .attr('selected', 'selected');
+        .attr('selected', 'selected');*/
 
       $('#canalTexto').html(canal);
-      $('#codigoTexto').html(codigo);
+      $('#codigoTexto').html(codigoPlantilla);
 
       showStep(null, 3);
     }
@@ -207,8 +205,6 @@ define(function (require) {
 
   function save() {
     var name = $('#canal').find('option:selected').html();
-    var canal = getSelect('canal');
-    var codigo = getSelect('codigo');
 
     // 'payload' is initialized on 'initActivity' above.
     // Journey Builder sends an initial payload with defaults
@@ -221,7 +217,7 @@ define(function (require) {
         canal: canal,
       },
       {
-        codigoPlantilla: codigo,
+        codigoPlantilla: codigoPlantilla,
       },
       {
         emailAddress: '{{InteractionDefaults.Email}}',
@@ -243,7 +239,7 @@ define(function (require) {
       .trim();
   }
 
-  function load_json_data(id, parent_id) {
+  function load_json_data(id, parent_id, currentValue) {
     var html_code = '';
     $.getJSON('canal.json', function (data) {
       html_code += '<option value="">--</option>';
@@ -261,6 +257,11 @@ define(function (require) {
         }
       });
       $('#' + id).html(html_code);
+      if (currentValue) {
+        $('#' + id)
+          .find('option[value=' + currentValue + ']')
+          .attr('selected', 'selected');
+      }
     });
   }
 });
