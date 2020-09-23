@@ -48,9 +48,9 @@ define(function (require) {
       });
 
       if (canal != '') {
-        load_json_data('código', canal);
+        load_json_data('codigo', canal);
       } else {
-        $('#codigo').html('<option value="">Select código</option>');
+        $('#codigo').html('<option value="">--</option>');
       }
 
       $('#canalTexto').html(canal);
@@ -230,7 +230,7 @@ define(function (require) {
   function load_json_data(id, parent_id) {
     var html_code = '';
     $.getJSON('canal.json', function (data) {
-      html_code += '<option value="">Select ' + id + '</option>';
+      html_code += '<option value="">--</option>';
       $.each(data, function (key, value) {
         if (id == 'canal') {
           if (value.parent_id == '0') {
