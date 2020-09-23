@@ -27,6 +27,7 @@ define(function (require) {
   connection.on('requestedInteraction', requestedInteractionHandler);
 
   function onRender() {
+    console.log('onRender');
     // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
 
@@ -68,6 +69,7 @@ define(function (require) {
   }
 
   function initialize(data) {
+    console.log('initialize');
     if (data) {
       payload = data;
     }
@@ -105,11 +107,12 @@ define(function (require) {
       $('#canal')
         .find('option[value=' + canal + ']')
         .attr('selected', 'selected');
-      $('#canalTexto').html(canal);
 
       $('#codigo')
         .find('option[value=' + codigo + ']')
         .attr('selected', 'selected');
+
+      $('#canalTexto').html(canal);
       $('#codigoTexto').html(codigo);
 
       showStep(null, 3);
