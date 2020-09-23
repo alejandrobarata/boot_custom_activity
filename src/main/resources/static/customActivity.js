@@ -39,8 +39,6 @@ define(function (require) {
     // connection.trigger('requestTokens');
     // connection.trigger('requestEndpoints');
 
-    load_json_data('canal', 0, canal);
-
     // Disable the next button if a value isn't selected
     $('#canal').change(function () {
       canal = getSelect('canal');
@@ -98,6 +96,9 @@ define(function (require) {
         }
       });
     });
+
+    // Load selects
+    load_json_data('canal', 0, canal);
 
     // If there is no canal selected, disable the next button
     if (!canal || !codigo) {
