@@ -40,7 +40,6 @@ define(function (require) {
     // Disable the next button if a value isn't selected
     $('#canal').change(function () {
       var canal = getSelect('canal');
-      var codigo = getSelect('codigo');
 
       connection.trigger('updateButton', {
         button: 'next',
@@ -54,6 +53,17 @@ define(function (require) {
       }
 
       $('#canalTexto').html(canal);
+    });
+    // Disable the next button if a value isn't selected
+    $('#codigo').change(function () {
+      var codigo = getSelect('codigo');
+
+      connection.trigger('updateButton', {
+        button: 'next',
+        enabled: Boolean(canal),
+      });
+
+      $('#codigoTexto').html(codigo);
     });
   }
 
