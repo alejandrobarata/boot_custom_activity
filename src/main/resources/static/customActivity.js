@@ -190,7 +190,8 @@ define(function (require) {
         codigoPostal: '{{Contact.Attribute.TestCA.CodigoPostal}}',
       },
       {
-        codigoPostalEvent: '{{Event.' + eventDefinitionKey + '.CodigoPostal}}',
+        codigoPostalEvent:
+          '{{Event.' + eventDefinitionKey + '."CodigoPostal"}}',
       },
     ];
 
