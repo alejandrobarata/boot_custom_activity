@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.boot.consumingrest.Quote;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
+
+    @Value("${endpoint}")
+    String endpoint;
 
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody Map<String, Object> payload) {
@@ -63,8 +67,13 @@ public class ActivityController {
         }
 
         RestTemplate restTemplate = new RestTemplate();
-        Quote quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-        System.out.println(quote.toString());
+        /*
+         * Quote quote = restTemplate.getForObject(endpoint, Quote.class);
+         * System.out.println(quote.toString());
+         */
+
+        final Quote responseBody = restTemplate.postForObject(endpoint, payload, Quote.class);
+        System.out.println(responseBody.getId());
 
         return new ActivityResult("false");
     }

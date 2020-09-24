@@ -8,11 +8,10 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Quote {
 
-    private String type;
-    private Value value;
+    private Integer id;
 
     @Override
     public String toString() {
-        return "Quote{" + "type='" + type + '\'' + ", value=" + value + '}';
+        return "Quote{id=" + id + "}";
     }
 }

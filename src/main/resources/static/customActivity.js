@@ -16,6 +16,7 @@ define(function (require) {
 
   var canal = '';
   var codigoPlantilla = '';
+  var mapData = new Map();
 
   $(window).ready(onRender);
 
@@ -30,7 +31,8 @@ define(function (require) {
   connection.on('requestedInteraction', requestedInteractionHandler);
 
   function onRender() {
-    console.log('onRender');
+    load_json_data('canal', 'papel');
+
     // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
 
@@ -49,7 +51,8 @@ define(function (require) {
       });
 
       if (canal != '') {
-        load_json_data('codigo', canal, codigoPlantilla);
+        // load_json_data('codigo', canal, codigoPlantilla);
+        loadDataSelect('codigo', canal);
       } else {
         $('#codigo').html('<option value="">--</option>');
       }
@@ -97,7 +100,7 @@ define(function (require) {
     });
 
     // Load selects
-    load_json_data('canal', 0, canal);
+    // load_json_data();
 
     // If there is no canal selected, disable the next button
     if (!canal || !codigoPlantilla) {
@@ -239,23 +242,20 @@ define(function (require) {
       .trim();
   }
 
-  function load_json_data(id, parent_id, currentValue) {
+  function load_json_data(id, currentValue) {
     var html_code = '';
-    $.getJSON('canal.json', function (data) {
+    $.getJSON('data.json', function (data) {
       html_code += '<option value="">--</option>';
       $.each(data, function (key, value) {
-        if (id == 'canal') {
-          if (value.parent_id == '0') {
-            html_code +=
-              '<option value="' + value.id + '">' + value.name + '</option>';
-          }
+        if (value.parent_id == '0') {
+          mapData.set(value.id, new Map());
+          html_code +=
+            '<option value="' + value.id + '">' + value.name + '</option>';
         } else {
-          if (value.parent_id == parent_id) {
-            html_code +=
-              '<option value="' + value.id + '">' + value.name + '</option>';
-          }
+          mapData.get(value.parent_id).set(value.id, value.name);
         }
       });
+
       $('#' + id).html(html_code);
       if (currentValue) {
         $('#' + id)
@@ -265,5 +265,15 @@ define(function (require) {
         $('#' + id).trigger('change');
       }
     });
+  }
+
+  function loadDataSelect(id, parent_id) {
+    var html_code = '<option value="">--</option>';
+    if (mapData.has(parent_id)) {
+      for (var [clave, valor] of mapData.get(parent_id)) {
+        html_code += '<option value="' + clave + '">' + valor + '</option>';
+      }
+      $('#' + id).html(html_code);
+    }
   }
 });
