@@ -31,8 +31,6 @@ define(function (require) {
   connection.on('requestedInteraction', requestedInteractionHandler);
 
   function onRender() {
-    load_json_data('canal', 'papel');
-
     // JB will respond the first time 'ready' is called with 'initActivity'
     connection.trigger('ready');
 
@@ -100,7 +98,7 @@ define(function (require) {
     });
 
     // Load selects
-    // load_json_data();
+    load_json_data('canal', canal);
 
     // If there is no canal selected, disable the next button
     if (!canal || !codigoPlantilla) {

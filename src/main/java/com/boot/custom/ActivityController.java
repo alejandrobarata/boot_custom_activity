@@ -73,7 +73,7 @@ public class ActivityController {
          */
 
         final Quote responseBody = restTemplate.postForObject(endpoint, payload, Quote.class);
-        System.out.println(responseBody.getId());
+        // System.out.println(responseBody.getId());
 
         return new ActivityResult("false");
     }
