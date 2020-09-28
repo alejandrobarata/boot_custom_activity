@@ -228,6 +228,35 @@ define(function (require) {
       },
     ];
 
+    console.log(payload['outcomes']);
+
+    payload['outcomes'] = [
+      {
+        arguments: {
+          branchResult: 'true',
+        },
+        metaData: {
+          label: 'True código postal',
+        },
+      },
+      {
+        arguments: {
+          branchResult: 'false',
+        },
+        metaData: {
+          label: 'False código postal',
+        },
+      },
+      {
+        arguments: {
+          branchResult: '0',
+        },
+        metaData: {
+          label: '0 código postal',
+        },
+      },
+    ];
+
     payload['metaData'].isConfigured = true;
 
     connection.trigger('updateActivity', payload);
