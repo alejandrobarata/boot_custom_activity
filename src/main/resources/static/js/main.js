@@ -2,19 +2,19 @@
 
 requirejs.config({
   paths: {
-    postmonger: 'postmonger.min',
+    postmonger: 'postmonger',
   },
   shim: {
     'jquery.min': {
       exports: '$',
     },
-    'customActivity.min': {
+    customActivity: {
       deps: ['jquery.min', 'postmonger'],
     },
   },
 });
 
-requirejs(['jquery.min', 'customActivity.min'], function ($, customEvent) {});
+requirejs(['jquery.min', 'customActivity'], function ($, customEvent) {});
 
 requirejs.onError = function (err) {
   if (err.requireType === 'timeout') {
