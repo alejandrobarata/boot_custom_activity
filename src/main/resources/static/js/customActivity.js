@@ -228,35 +228,6 @@ define(function (require) {
       },
     ];
 
-    console.log(payload['outcomes']);
-
-    payload['outcomes'] = [
-      {
-        arguments: {
-          branchResult: 'true',
-        },
-        metaData: {
-          label: 'True código postal',
-        },
-      },
-      {
-        arguments: {
-          branchResult: 'false',
-        },
-        metaData: {
-          label: 'False código postal',
-        },
-      },
-      {
-        arguments: {
-          branchResult: '0',
-        },
-        metaData: {
-          label: '0 código postal',
-        },
-      },
-    ];
-
     payload['metaData'].isConfigured = true;
 
     connection.trigger('updateActivity', payload);
@@ -297,9 +268,15 @@ define(function (require) {
   function loadDataSelect(id, parent_id) {
     var html_code = '<option value="">--</option>';
     if (mapData.has(parent_id)) {
-      for (var [clave, valor] of mapData.get(parent_id)) {
-        html_code += '<option value="' + clave + '">' + valor + '</option>';
+      for (var key in mapData.get(parent_id)) {
+        html_code +=
+          '<option value="' +
+          key +
+          '">' +
+          mapData.get(parent_id)[key] +
+          '</option>';
       }
+
       $('#' + id).html(html_code);
     }
   }
