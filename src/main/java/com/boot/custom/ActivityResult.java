@@ -1,5 +1,7 @@
 package com.boot.custom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityResult {
+public class ActivityResult<T> {
 
-    private String branchResult;
+    @JsonProperty("_embedded")
+    private T embedded;
 
 }
