@@ -269,6 +269,7 @@ define(function (require) {
     var html_code = '<option value="">--</option>';
     if (mapData.has(parent_id)) {
       for (var key in mapData.get(parent_id)) {
+        console.log(key);
         html_code +=
           '<option value="' +
           key +
