@@ -49,7 +49,7 @@ public class ActivityController {
     }
 
     @PostMapping("/execute")
-    public ResponseEntity<ActivityResult<String>> execute(@RequestBody ExecutePayload payload) {
+    public ResponseEntity<ActivityResult<Integer>> execute(@RequestBody ExecutePayload payload) {
         System.out.println(payload);
         String canal;
         String codigoPlantilla;
@@ -75,8 +75,8 @@ public class ActivityController {
         final Quote responseBody = restTemplate.postForObject(endpoint, payload, Quote.class);
         // System.out.println(responseBody.getId());
 
-        ActivityResult<String> response = new ActivityResult<>();
-        response.setEmbedded("false");
+        ActivityResult<Integer> response = new ActivityResult<>();
+        response.setEmbedded(1);
 
         return ResponseEntity.ok(response);
     }
