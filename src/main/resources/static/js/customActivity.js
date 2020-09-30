@@ -267,8 +267,8 @@ define(function (require) {
 
   function loadDataSelect(id, parent_id) {
     var html_code = '<option value="">--</option>';
-    console.log('loadDataSelect');
     if (mapData.has(parent_id)) {
+      console.log('loadDataSelect');
       for (var key in mapData.get(parent_id)) {
         console.log(key);
         html_code +=
