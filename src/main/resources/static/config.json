@@ -18,22 +18,19 @@
       "url": "https://custom-activity-postal.herokuapp.com/activity/save",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": false
     },
     "publish": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/publish",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": false
     },
     "validate": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/validate",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": false
     }
   },
   "wizardSteps": [
@@ -56,7 +53,6 @@
   "outcomes": [
     {
       "arguments": {
-        "branchResult": "true_postal",
         "_embedded": "true"
       },
       "metaData": {
@@ -65,7 +61,6 @@
     },
     {
       "arguments": {
-        "branchResult": "false_postal",
         "_embedded": "false"
       },
       "metaData": {
@@ -78,7 +73,6 @@
       "inArguments": [],
       "outArguments": [
         {
-          "branchResult": "",
           "_embedded": ""
         }
       ],
@@ -87,8 +81,7 @@
       "body": "",
       "header": "",
       "format": "json",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here",
+      "useJwt": false,
       "timeout": 90000
     }
   },
@@ -124,13 +117,6 @@
           }
         ],
         "outArguments": [
-          {
-            "branchResult": {
-              "dataType": "String",
-              "direction": "out",
-              "access": "visible"
-            }
-          },
           {
             "_embedded": {
               "dataType": "String",
