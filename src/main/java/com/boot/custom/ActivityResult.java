@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActivityResult<T> {
-
-    @JsonProperty("_embedded")
-    private T embedded;
+public class ActivityResult {
+    @JsonProperty("branchResult")
+    private String branchResult;
 
 }
