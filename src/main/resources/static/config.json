@@ -87,7 +87,7 @@
       "body": "",
       "header": "",
       "format": "json",
-      "useJwt": true,,
+      "useJwt": true,
       "customerKey": "your-encryption-customer-key-here",
       "timeout": 90000
     }
