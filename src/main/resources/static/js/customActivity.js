@@ -9,6 +9,7 @@ define(function (require) {
   var steps = [
     // initialize to the same value as what's set in config.json for consistency
     { label: 'Código plantilla', key: 'step1' },
+    { label: 'Info', key: 'step2' },
   ];
   var currentStep = steps[0].key;
 
@@ -22,7 +23,7 @@ define(function (require) {
   connection.on('requestedEndpoints', onGetEndpoints);
 
   connection.on('clickedNext', onClickedNext);
-  // connection.on('clickedBack', onClickedBack);
+  connection.on('clickedBack', onClickedBack);
   connection.on('gotoStep', onGotoStep);
 
   connection.on('requestedInteraction', requestedInteractionHandler);
@@ -41,9 +42,11 @@ define(function (require) {
       codigoPlantilla = getSelect('codigo');
 
       connection.trigger('updateButton', {
-        button: 'done',
-        enabled: Boolean(codigoPlantilla),
+        button: 'next',
+        enabled: Boolean(canal),
       });
+
+      $('#codigoTexto').html(codigoPlantilla);
     });
   }
 
@@ -73,14 +76,16 @@ define(function (require) {
 
     // Load selects
     load_json_data('codigo', codigoPlantilla);
-    console.log('codigoPlantilla: ' + codigoPlantilla);
 
     // If there is no canal selected, disable the next button
     if (!codigoPlantilla) {
-      console.log('Entro');
       showStep(null, 1);
-      connection.trigger('updateButton', { button: 'done', enabled: false });
+      connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
+    } else {
+      $('#codigoTexto').html(codigoPlantilla);
+
+      showStep(null, 2);
     }
   }
 
@@ -95,8 +100,17 @@ define(function (require) {
   }
 
   function onClickedNext() {
-    save();
+    if (currentStep.key === 'step2') {
+      save();
+    } else {
+      connection.trigger('nextStep');
+    }
   }
+
+  function onClickedBack() {
+    connection.trigger('prevStep');
+  }
+
   function onGotoStep(step) {
     showStep(step);
     connection.trigger('ready');
@@ -115,9 +129,27 @@ define(function (require) {
       case 'step1':
         $('#step1').show();
         connection.trigger('updateButton', {
-          button: 'done',
+          button: 'next',
           enabled: Boolean(getSelect('codigo')),
         });
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: false,
+        });
+        break;
+      case 'step2':
+        $('#step2').show();
+        connection.trigger('updateButton', {
+          button: 'back',
+          visible: true,
+        });
+
+        connection.trigger('updateButton', {
+          button: 'next',
+          text: 'done',
+          visible: true,
+        });
+
         break;
     }
   }

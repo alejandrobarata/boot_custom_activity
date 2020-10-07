@@ -36,6 +36,10 @@
   "wizardSteps": [
     {
       "label": "Código plantilla",
+      "key": "step1"
+    },
+    {
+      "label": "Info",
       "key": "step2"
     }
   ],
