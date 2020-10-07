@@ -38,11 +38,11 @@ define(function (require) {
 
     // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
-      codigo = getSelect('codigo');
+      codigoPlantilla = getSelect('codigo');
 
       connection.trigger('updateButton', {
         button: 'done',
-        enabled: Boolean(codigo),
+        enabled: Boolean(codigoPlantilla),
       });
     });
   }
