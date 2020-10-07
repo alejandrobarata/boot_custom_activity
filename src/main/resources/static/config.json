@@ -53,7 +53,7 @@
   "outcomes": [
     {
       "arguments": {
-        "_embedded": "true"
+        "branchResult": "true"
       },
       "metaData": {
         "label": "True código postal"
@@ -61,7 +61,7 @@
     },
     {
       "arguments": {
-        "_embedded": "false"
+        "branchResult": "false"
       },
       "metaData": {
         "label": "False código postal"
@@ -73,7 +73,7 @@
       "inArguments": [],
       "outArguments": [
         {
-          "_embedded": ""
+          "branchResult": ""
         }
       ],
       "url": "https://custom-activity-postal.herokuapp.com/activity/execute",
@@ -118,7 +118,7 @@
         ],
         "outArguments": [
           {
-            "_embedded": {
+            "branchResult": {
               "dataType": "String",
               "direction": "out",
               "access": "visible"
