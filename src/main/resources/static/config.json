@@ -18,19 +18,22 @@
       "url": "https://custom-activity-postal.herokuapp.com/activity/save",
       "body": "",
       "header": "",
-      "useJwt": true
+      "useJwt": true,
+      "customerKey": "your-encryption-customer-key-here"
     },
     "publish": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/publish",
       "body": "",
       "header": "",
-      "useJwt": true
+      "useJwt": true,
+      "customerKey": "your-encryption-customer-key-here"
     },
     "validate": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/validate",
       "body": "",
       "header": "",
-      "useJwt": true
+      "useJwt": true,
+      "customerKey": "your-encryption-customer-key-here"
     }
   },
   "wizardSteps": [
@@ -84,7 +87,8 @@
       "body": "",
       "header": "",
       "format": "json",
-      "useJwt": true,
+      "useJwt": true,,
+      "customerKey": "your-encryption-customer-key-here",
       "timeout": 90000
     }
   },
