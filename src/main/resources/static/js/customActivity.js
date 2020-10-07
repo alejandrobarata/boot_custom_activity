@@ -72,7 +72,7 @@ define(function (require) {
     });
 
     // Load selects
-    load_json_data(codigoPlantilla);
+    load_json_data('codigo', codigoPlantilla);
 
     // If there is no canal selected, disable the next button
     if (!codigoPlantilla) {
@@ -161,7 +161,7 @@ define(function (require) {
       .trim();
   }
 
-  function load_json_data(currentValue) {
+  function load_json_data(id, currentValue) {
     var html_code = '';
     $.getJSON('data.json', function (data) {
       html_code += '<option value="">--</option>';
