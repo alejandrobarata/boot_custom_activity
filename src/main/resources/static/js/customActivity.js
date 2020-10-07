@@ -73,9 +73,11 @@ define(function (require) {
 
     // Load selects
     load_json_data('codigo', codigoPlantilla);
+    console.log('codigoPlantilla: ' + codigoPlantilla);
 
     // If there is no canal selected, disable the next button
     if (!codigoPlantilla) {
+      console.log('Entro');
       showStep(null, 1);
       connection.trigger('updateButton', { button: 'done', enabled: false });
       // If there is a canal, skip to the summary step
