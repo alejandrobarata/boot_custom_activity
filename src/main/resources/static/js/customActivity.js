@@ -8,15 +8,12 @@ define(function (require) {
   var eventDefinitionKey = '';
   var steps = [
     // initialize to the same value as what's set in config.json for consistency
-    { label: 'Canal', key: 'step1' },
-    { label: 'Código plantilla', key: 'step2' },
-    { label: 'Info', key: 'step3' },
+    { label: 'Código plantilla', key: 'step1' },
   ];
   var currentStep = steps[0].key;
 
   var canal = '';
   var codigoPlantilla = '';
-  var mapData = new Map();
 
   $(window).ready(onRender);
 
@@ -25,7 +22,7 @@ define(function (require) {
   connection.on('requestedEndpoints', onGetEndpoints);
 
   connection.on('clickedNext', onClickedNext);
-  connection.on('clickedBack', onClickedBack);
+  // connection.on('clickedBack', onClickedBack);
   connection.on('gotoStep', onGotoStep);
 
   connection.on('requestedInteraction', requestedInteractionHandler);
@@ -40,33 +37,13 @@ define(function (require) {
     // connection.trigger('requestEndpoints');
 
     // Disable the next button if a value isn't selected
-    $('#canal').change(function () {
-      canal = getSelect('canal');
-
-      connection.trigger('updateButton', {
-        button: 'next',
-        enabled: Boolean(canal),
-      });
-
-      if (canal != '') {
-        // load_json_data('codigo', canal, codigoPlantilla);
-        loadDataSelect('codigo', canal);
-      } else {
-        $('#codigo').html('<option value="">--</option>');
-      }
-
-      $('#canalTexto').html(canal);
-    });
-    // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
-      codigoPlantilla = getSelect('codigo');
+      codigo = getSelect('codigo');
 
       connection.trigger('updateButton', {
-        button: 'next',
-        enabled: Boolean(canal),
+        button: 'done',
+        enabled: Boolean(codigo),
       });
-
-      $('#codigoTexto').html(codigoPlantilla);
     });
   }
 
@@ -88,9 +65,6 @@ define(function (require) {
 
     $.each(inArguments, function (index, inArgument) {
       $.each(inArgument, function (key, val) {
-        if (key === 'canal') {
-          canal = val;
-        }
         if (key === 'codigoPlantilla') {
           codigoPlantilla = val;
         }
@@ -98,26 +72,13 @@ define(function (require) {
     });
 
     // Load selects
-    load_json_data('canal', canal);
+    load_json_data(codigoPlantilla);
 
     // If there is no canal selected, disable the next button
-    if (!canal || !codigoPlantilla) {
+    if (!codigoPlantilla) {
       showStep(null, 1);
-      connection.trigger('updateButton', { button: 'next', enabled: false });
+      connection.trigger('updateButton', { button: 'done', enabled: false });
       // If there is a canal, skip to the summary step
-    } else {
-      /*$('#canal')
-        .find('option[value=' + canal + ']')
-        .attr('selected', 'selected');
-
-      $('#codigo')
-        .find('option[value=' + codigo + ']')
-        .attr('selected', 'selected');*/
-
-      $('#canalTexto').html(canal);
-      $('#codigoTexto').html(codigoPlantilla);
-
-      showStep(null, 3);
     }
   }
 
@@ -132,17 +93,8 @@ define(function (require) {
   }
 
   function onClickedNext() {
-    if (currentStep.key === 'step3') {
-      save();
-    } else {
-      connection.trigger('nextStep');
-    }
+    save();
   }
-
-  function onClickedBack() {
-    connection.trigger('prevStep');
-  }
-
   function onGotoStep(step) {
     showStep(step);
     connection.trigger('ready');
@@ -161,40 +113,9 @@ define(function (require) {
       case 'step1':
         $('#step1').show();
         connection.trigger('updateButton', {
-          button: 'next',
-          enabled: Boolean(getSelect('canal')),
-        });
-        connection.trigger('updateButton', {
-          button: 'back',
-          visible: false,
-        });
-        break;
-      case 'step2':
-        $('#step2').show();
-        connection.trigger('updateButton', {
-          button: 'back',
-          visible: true,
-        });
-        connection.trigger('updateButton', {
-          button: 'next',
-          text: 'next',
-          visible: true,
+          button: 'done',
           enabled: Boolean(getSelect('codigo')),
         });
-        break;
-      case 'step3':
-        $('#step3').show();
-        connection.trigger('updateButton', {
-          button: 'back',
-          visible: true,
-        });
-
-        connection.trigger('updateButton', {
-          button: 'next',
-          text: 'done',
-          visible: true,
-        });
-
         break;
     }
   }
@@ -205,13 +126,13 @@ define(function (require) {
   }
 
   function save() {
-    var name = $('#canal').find('option:selected').html();
+    // var name = $('#canal').find('option:selected').html();
 
     // 'payload' is initialized on 'initActivity' above.
     // Journey Builder sends an initial payload with defaults
     // set by this activity's config.json file.  Any property
     // may be overridden as desired.
-    payload.name = name;
+    // payload.name = name;
 
     payload['arguments'].execute.inArguments = [
       {
@@ -240,17 +161,15 @@ define(function (require) {
       .trim();
   }
 
-  function load_json_data(id, currentValue) {
+  function load_json_data(currentValue) {
     var html_code = '';
     $.getJSON('data.json', function (data) {
       html_code += '<option value="">--</option>';
       $.each(data, function (key, value) {
-        if (value.parent_id == '0') {
-          mapData.set(value.id, new Map());
-          html_code +=
-            '<option value="' + value.id + '">' + value.name + '</option>';
-        } else {
-          mapData.get(value.parent_id).set(value.id, value.name);
+        html_code +=
+          '<option value="' + value.id + '">' + value.name + '</option>';
+        if (!canal) {
+          canal = value.canal;
         }
       });
 
@@ -259,20 +178,7 @@ define(function (require) {
         $('#' + id)
           .find('option[value=' + currentValue + ']')
           .attr('selected', 'selected');
-
-        $('#' + id).trigger('change');
       }
     });
-  }
-
-  function loadDataSelect(id, parent_id) {
-    var html_code = '<option value="">--</option>';
-    if (mapData.has(parent_id)) {
-      mapData.get(parent_id).forEach(function (value, key) {
-        html_code += '<option value="' + key + '">' + value + '</option>';
-      });
-
-      $('#' + id).html(html_code);
-    }
   }
 });

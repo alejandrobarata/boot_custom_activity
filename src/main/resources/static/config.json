@@ -35,16 +35,8 @@
   },
   "wizardSteps": [
     {
-      "label": "Canal",
-      "key": "step1"
-    },
-    {
       "label": "Código plantilla",
       "key": "step2"
-    },
-    {
-      "label": "Info",
-      "key": "step3"
     }
   ],
   "userInterfaces": {
