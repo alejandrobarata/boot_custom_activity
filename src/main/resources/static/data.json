@@ -1,17 +1,32 @@
 [
   {
+    "id": "papel",
+    "name": "Papel",
+    "parent_id": "0"
+  },
+  {
+    "id": "fto",
+    "name": "fto",
+    "parent_id": "0"
+  },
+  {
+    "id": "telefono",
+    "name": "Teléfono",
+    "parent_id": "0"
+  },
+  {
     "id": "4",
     "name": "90001",
-    "canal": "ftp"
+    "parent_id": "papel"
   },
   {
     "id": "5",
     "name": "90002",
-    "canal": "ftp"
+    "parent_id": "fto"
   },
   {
     "id": "6",
     "name": "90003",
-    "canal": "ftp"
+    "parent_id": "fto"
   }
 ]
