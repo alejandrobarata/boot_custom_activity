@@ -175,11 +175,12 @@ define(function (require) {
           button: 'back',
           visible: true,
         });
+        console.log(getSelect('codigo'));
         connection.trigger('updateButton', {
           button: 'next',
           text: 'next',
           visible: true,
-          enabled: false,
+          enabled: Boolean(getSelect('codigo')),
         });
         break;
       case 'step3':
