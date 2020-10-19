@@ -49,11 +49,6 @@ define(function (require) {
       });
 
       if (canal != '') {
-        // load_json_data('codigo', canal, codigoPlantilla);
-        connection.trigger('updateButton', {
-          button: 'next',
-          enabled: false,
-        });
         loadDataSelect('codigo', canal);
       } else {
         $('#codigo').html('<option value="">--</option>');
@@ -61,6 +56,7 @@ define(function (require) {
 
       $('#canalTexto').html(canal);
     });
+
     // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
       codigoPlantilla = getSelect('codigo');
@@ -183,7 +179,7 @@ define(function (require) {
           button: 'next',
           text: 'next',
           visible: true,
-          enabled: Boolean(getSelect('codigo')),
+          enabled: false,
         });
         break;
       case 'step3':
