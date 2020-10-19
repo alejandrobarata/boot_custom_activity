@@ -41,7 +41,7 @@ define(function (require) {
 
     // Disable the next button if a value isn't selected
     $('#canal').change(function () {
-      canal = getSelectValue('canal');
+      canal = getSelect('canal');
 
       connection.trigger('updateButton', {
         button: 'next',
@@ -50,23 +50,27 @@ define(function (require) {
 
       if (canal != '') {
         // load_json_data('codigo', canal, codigoPlantilla);
+        connection.trigger('updateButton', {
+          button: 'next',
+          enabled: false,
+        });
         loadDataSelect('codigo', canal);
       } else {
         $('#codigo').html('<option value="">--</option>');
       }
 
-      $('#canalTexto').html(getSelectText('canal'));
+      $('#canalTexto').html(canal);
     });
     // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
-      codigoPlantilla = getSelectValue('codigo');
+      codigoPlantilla = getSelect('codigo');
 
       connection.trigger('updateButton', {
         button: 'next',
         enabled: Boolean(canal),
       });
 
-      $('#codigoTexto').html(getSelectText('codigo'));
+      $('#codigoTexto').html(codigoPlantilla);
     });
   }
 
@@ -233,17 +237,10 @@ define(function (require) {
     connection.trigger('updateActivity', payload);
   }
 
-  function getSelectValue(id) {
+  function getSelect(id) {
     return $('#' + id)
       .find('option:selected')
       .attr('value')
-      .trim();
-  }
-
-  function getSelectText(id) {
-    return $('#' + id)
-      .find('option:selected')
-      .text()
       .trim();
   }
 
