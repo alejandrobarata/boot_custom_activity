@@ -1,17 +1,17 @@
 [
   {
-    "id": "4",
-    "name": "90001",
-    "canal": "ftp"
+    "id": "recibos",
+    "name": "Recibos",
+    "parent_id": "0"
   },
   {
-    "id": "5",
-    "name": "90002",
-    "canal": "ftp"
+    "id": "SGI_RECIBO-EXTORNO/FTP",
+    "name": "SGI_RECIBO-EXTORNO",
+    "parent_id": "recibos"
   },
   {
-    "id": "6",
-    "name": "90003",
-    "canal": "ftp"
+    "id": "SGI_RECIBO-NORMAL/FTP",
+    "name": "SGI_RECIBO-NORMAL",
+    "parent_id": "recibos"
   }
 ]

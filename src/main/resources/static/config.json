@@ -18,32 +18,33 @@
       "url": "https://custom-activity-postal.herokuapp.com/activity/save",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": true
     },
     "publish": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/publish",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": true
     },
     "validate": {
       "url": "https://custom-activity-postal.herokuapp.com/activity/validate",
       "body": "",
       "header": "",
-      "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here"
+      "useJwt": true
     }
   },
   "wizardSteps": [
     {
-      "label": "Código plantilla",
+      "label": "Canal",
       "key": "step1"
     },
     {
-      "label": "Info",
+      "label": "Código plantilla",
       "key": "step2"
+    },
+    {
+      "label": "Info",
+      "key": "step3"
     }
   ],
   "userInterfaces": {
@@ -85,7 +86,6 @@
       "header": "",
       "format": "json",
       "useJwt": true,
-      "customerKey": "your-encryption-customer-key-here",
       "timeout": 90000
     }
   },
