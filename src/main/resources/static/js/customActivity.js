@@ -15,7 +15,7 @@ define(function (require) {
   var currentStep = steps[0].key;
 
   var canal = '';
-  var codigoPlantilla = '';
+  var tipo_documento = '';
   var mapData = new Map();
 
   $(window).ready(onRender);
@@ -59,14 +59,14 @@ define(function (require) {
 
     // Disable the next button if a value isn't selected
     $('#codigo').change(function () {
-      codigoPlantilla = getSelect('codigo');
+      tipo_documento = getSelect('codigo');
 
       connection.trigger('updateButton', {
         button: 'next',
         enabled: Boolean(canal),
       });
 
-      $('#codigoTexto').html(codigoPlantilla);
+      $('#codigoTexto').html(tipo_documento);
     });
   }
 
@@ -91,8 +91,8 @@ define(function (require) {
         if (key === 'canal') {
           canal = val;
         }
-        if (key === 'codigoPlantilla') {
-          codigoPlantilla = val;
+        if (key === 'tipo_documento') {
+          tipo_documento = val;
         }
       });
     });
@@ -101,7 +101,7 @@ define(function (require) {
     load_json_data('canal', canal);
 
     // If there is no canal selected, disable the next button
-    if (!canal || !codigoPlantilla) {
+    if (!canal || !tipo_documento) {
       showStep(null, 1);
       connection.trigger('updateButton', { button: 'next', enabled: false });
       // If there is a canal, skip to the summary step
@@ -115,7 +115,7 @@ define(function (require) {
         .attr('selected', 'selected');*/
 
       $('#canalTexto').html(canal);
-      $('#codigoTexto').html(codigoPlantilla);
+      $('#codigoTexto').html(tipo_documento);
 
       showStep(null, 3);
     }
@@ -216,16 +216,19 @@ define(function (require) {
 
     payload['arguments'].execute.inArguments = [
       {
+        tipo_envio: 'POSTAL',
+      },
+      {
         canal: canal,
       },
       {
-        codigoPlantilla: codigoPlantilla,
+        tipo_documento: tipo_documento,
       },
       {
-        emailAddress: '{{InteractionDefaults.Email}}',
-      },
-      {
-        codigoPostal: '{{Event.' + eventDefinitionKey + '."CodigoPostal"}}',
+        codigoReferencia:
+          '{{Event.' +
+          eventDefinitionKey +
+          '."comunicacion-comunicacion_ref"}}',
       },
     ];
 
